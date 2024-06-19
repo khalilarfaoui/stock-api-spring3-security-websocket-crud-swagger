@@ -5,7 +5,9 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -19,8 +21,10 @@ public class Stock {
 
     private int quantity ;
 
-    private LocalDateTime dataFrom ;
-    private LocalDateTime dateTo ;
+    private LocalDate dataFrom ;
+    private LocalDate dateTo ;
+
+    private LocalDateTime createdAt ;
 
     private String emplacement ;
 
@@ -30,5 +34,5 @@ public class Stock {
 
 
     @OneToMany(mappedBy = "stock", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<StockHistory> stockHistoryList;
+    private List<StockHistory> stockHistoryList = new ArrayList<>();
 }

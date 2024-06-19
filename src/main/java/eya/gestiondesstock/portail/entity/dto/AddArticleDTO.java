@@ -10,10 +10,5 @@ import lombok.NoArgsConstructor;
 public class AddArticleDTO {
 
     private String name ;
-
-    private String codeBarre ;
-
-    private int quantityTotal ;
-
-    private long categoryId ;
+    private String categoryId ;
 }

@@ -79,4 +79,8 @@ public class ImageController {
                 .contentType(MediaType.valueOf(dbImage.get().getType()))
                 .body(ImageUtility.decompressImage(dbImage.get().getImage()));
     }
+    @DeleteMapping("images/{id}")
+    public void delete(@PathVariable Long id){
+        imageRepository.deleteById(id);
+    }
 }

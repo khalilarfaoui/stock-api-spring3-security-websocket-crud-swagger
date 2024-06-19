@@ -1,7 +1,9 @@
 package eya.gestiondesstock.portail.controller;
 
+import eya.gestiondesstock.portail.entity.Article;
 import eya.gestiondesstock.portail.entity.Category;
 import eya.gestiondesstock.portail.repository.CategoryRepository;
+import eya.gestiondesstock.portail.repository.ArticleRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -9,12 +11,16 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 import java.util.Optional;
 
+@CrossOrigin("*")
 @RestController
 @RequestMapping("/categories")
 public class CategoryController {
 
     @Autowired
     private CategoryRepository categoryRepository;
+
+    @Autowired
+    private ArticleRepository articleRepository;
 
     @GetMapping
     public List<Category> getAllCategories() {
@@ -28,17 +34,26 @@ public class CategoryController {
     }
 
     @PostMapping
-    public Category createCategory(@RequestBody Category category) {
-        return categoryRepository.save(category);
+    public ResponseEntity<?> createCategory(@RequestBody Category category) {
+        Optional<Category> existingCategory = categoryRepository.findByName(category.getName());
+        if (existingCategory.isPresent()) {
+            return ResponseEntity.badRequest().body("Le nom de la catégorie existe déjà");
+        } else {
+            categoryRepository.save(category);
+            return ResponseEntity.ok(category);
+        }
     }
 
     @PutMapping("/{id}")
     public ResponseEntity<Category> updateCategory(@PathVariable Long id, @RequestBody Category categoryDetails) {
         Optional<Category> optionalCategory = categoryRepository.findById(id);
+
         if (optionalCategory.isPresent()) {
             Category category = optionalCategory.get();
             category.setName(categoryDetails.getName());
-            category.setArticleList(categoryDetails.getArticleList());
+
+
+
             Category updatedCategory = categoryRepository.save(category);
             return ResponseEntity.ok(updatedCategory);
         } else {
