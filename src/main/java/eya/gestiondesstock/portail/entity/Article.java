@@ -37,4 +37,7 @@ public class Article {
     public void addImageList(Image image) {
         this.imageList.add(image);
     }
+
+    @OneToOne
+    private Capteur capteur ;
 }

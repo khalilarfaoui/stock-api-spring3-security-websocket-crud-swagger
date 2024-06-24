@@ -19,4 +19,7 @@ public class Capteur {
 
     @ManyToOne
     private TypeCapteur typeCapteur;
+
+    @OneToOne
+    private Article article;
 }

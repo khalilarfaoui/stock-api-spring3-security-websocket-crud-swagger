@@ -1,5 +1,6 @@
 package eya.gestiondesstock.portail.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -19,6 +20,7 @@ public class TypeCapteur {
 
     private String modele ;
 
+    @JsonIgnore
     @OneToMany(mappedBy = "typeCapteur", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Capteur> capteurs;
 }
