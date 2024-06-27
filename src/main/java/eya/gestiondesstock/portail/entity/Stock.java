@@ -1,5 +1,6 @@
 package eya.gestiondesstock.portail.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -32,7 +33,7 @@ public class Stock {
     private Article article;
 
 
-
+    @JsonIgnore
     @OneToMany(mappedBy = "stock", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<StockHistory> stockHistoryList = new ArrayList<>();
 }

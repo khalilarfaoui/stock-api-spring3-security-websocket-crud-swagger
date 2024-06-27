@@ -3,6 +3,7 @@ package eya.gestiondesstock.portail.controller;
 
 
 import eya.gestiondesstock.portail.entity.*;
+import eya.gestiondesstock.portail.entity.dto.LoginResponseDTO;
 import eya.gestiondesstock.portail.repository.UserRepository;
 import eya.gestiondesstock.portail.detailsService.JwtService;
 import eya.gestiondesstock.portail.services.IUserService;
@@ -39,11 +40,12 @@ public class UserController {
     private MailConfig emailService;
 
     @PostMapping("/login")
-    public MessageResponse addUser(@RequestBody AuthRequest authRequest){
+    public LoginResponseDTO login(@RequestBody AuthRequest authRequest){
         Authentication authenticate = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(authRequest.getUserName(), authRequest.getPassword()));
         if(authenticate.isAuthenticated()){
-            return new MessageResponse(
-                    jwtService.generateToken(authRequest.getUserName())
+            Utilisateur utilisateur = userRepository.findByUserName(authRequest.getUserName()).orElse(null);
+            return new LoginResponseDTO(
+                    jwtService.generateToken(authRequest.getUserName()), utilisateur.getId(), utilisateur.getRole()
             );
         }else {
             throw new UsernameNotFoundException("Invalid user request");

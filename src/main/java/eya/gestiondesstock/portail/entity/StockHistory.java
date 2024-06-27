@@ -1,6 +1,8 @@
 package eya.gestiondesstock.portail.entity;
 
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -26,7 +28,12 @@ public class StockHistory {
 
     private int put ;
 
-    private String addedBy ;
+    @ManyToOne
+    @JsonManagedReference(value = "addedBy")
+    private Utilisateur addedBy ;
 
-    private String pullBy ;
+
+    @ManyToOne
+    @JsonManagedReference(value = "pullBy")
+    private Utilisateur pullBy ;
 }

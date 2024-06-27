@@ -1,6 +1,7 @@
 package eya.gestiondesstock.portail.entity;
 
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
@@ -33,7 +34,13 @@ public class Utilisateur implements Serializable {
     @JsonIgnore
     @OneToMany
     private List<Image> imageList;
+    @OneToMany(mappedBy = "addedBy")
+    @JsonIgnore
+    private List<StockHistory> addedStockHistories;
 
+    @OneToMany(mappedBy = "pullBy")
+    @JsonIgnore
+    private List<StockHistory> pulledStockHistories;
 
 
 }
