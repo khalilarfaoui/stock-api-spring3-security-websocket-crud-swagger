@@ -8,6 +8,7 @@ import lombok.*;
 
 import java.io.Serializable;
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -42,5 +43,8 @@ public class Utilisateur implements Serializable {
     @JsonIgnore
     private List<StockHistory> pulledStockHistories;
 
+    @JsonIgnore
+    @OneToMany(mappedBy = "utilisateur", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Reclamer> ReclamerList = new ArrayList<>();
 
 }

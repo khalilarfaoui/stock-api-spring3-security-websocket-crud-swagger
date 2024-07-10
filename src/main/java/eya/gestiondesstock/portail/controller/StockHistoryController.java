@@ -12,6 +12,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 @CrossOrigin("*")
@@ -42,19 +43,23 @@ public class StockHistoryController {
     }
 
     @PostMapping("pull")
-    public ResponseEntity<?> pullStock(@RequestBody StockHistoryPullDTO stockHistoryPullDTO) {
-        Optional<Utilisateur> utilisateur = userRepository.findById(stockHistoryPullDTO.getPullBy());
-        Optional<Stock> stock = stockRepository.findById(stockHistoryPullDTO.getStock());
-        if(utilisateur.isPresent() && stock.isPresent()){
-            StockHistory stockHistory = new StockHistory();
-            stockHistory.setStock(stock.get());
-            stockHistory.setPull(stockHistoryPullDTO.getPull());
-            stockHistory.setPullBy(utilisateur.get());
-            stockHistory.setLocalDateTime(LocalDateTime.now());
-            return ResponseEntity.ok(stockHistoryRepository.save(stockHistory));
-        }else{
-          return ResponseEntity.badRequest().body("Bad Request");
+    public ResponseEntity<?> pullStock(@RequestBody List<StockHistoryPullDTO> stockHistoryPullDTOList) {
+        List<StockHistory> stockHistories = new ArrayList<>();
+        System.out.println(stockHistoryPullDTOList);
+        for (StockHistoryPullDTO stockHistoryPullDTO : stockHistoryPullDTOList){
+            Optional<Utilisateur> utilisateur = userRepository.findById(stockHistoryPullDTO.getPullBy());
+            Optional<Stock> stock = stockRepository.findById(stockHistoryPullDTO.getStock());
+            if(utilisateur.isPresent() && stock.isPresent()){
+                StockHistory stockHistory = new StockHistory();
+                stockHistory.setStock(stock.get());
+                stockHistory.setPull(stockHistoryPullDTO.getPull());
+                stockHistory.setPullBy(utilisateur.get());
+                stockHistory.setLocalDateTime(LocalDateTime.now());
+                stockHistories.add(stockHistory);
+            }
         }
+
+        return ResponseEntity.ok(stockHistoryRepository.saveAll(stockHistories));
 
     }
 
